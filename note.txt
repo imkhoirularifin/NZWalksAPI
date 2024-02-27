@@ -1,0 +1,14 @@
+Package Manager Console Command
+# Microsoft.EntityFrameworkCore.Tools
+
+## add new migration
+Add-Migration "Name Of Migration"
+
+## delete migration
+Remove-Migration
+
+## update database
+Update-Database
+
+## drop database
+Drop-Database

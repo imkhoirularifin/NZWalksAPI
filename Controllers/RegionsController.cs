@@ -1,101 +1,80 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NZWalksAPI.Data;
 using NZWalksAPI.Models.Domain;
+using NZWalksAPI.Models.Dto;
+using NZWalksAPI.Repositories.Interfaces;
 
 namespace NZWalksAPI.Controllers
 {
     [Route("api/regions")]
     [ApiController]
-    public class RegionsController : ControllerBase
+    public class RegionsController(IRegionRepository repository) : ControllerBase
     {
-        private readonly NZWalksDbContext _context;
-
-        public RegionsController(NZWalksDbContext context)
-        {
-            _context = context;
-        }
+        private readonly IRegionRepository repository = repository;
 
         // GET: api/regions
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Region>>> GetRegions()
         {
-            return await _context.Regions.ToListAsync();
+            var regions = await repository.GetRegions();
+            if (regions == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(regions);
         }
 
-        // GET: api/regions/CEBC247F-1EC3-4B4B-BD64-08DC36294D57
+        // GET: api/regions/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Region>> GetRegion(Guid id)
         {
-            var region = await _context.Regions.FindAsync(id);
+            var region = await repository.GetRegion(id);
 
             if (region == null)
             {
                 return NotFound();
             }
 
-            return region;
+            return Ok(region);
         }
 
-        // PUT: api/regions/CEBC247F-1EC3-4B4B-BD64-08DC36294D57
+        // PUT: api/regions/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRegion(Guid id, Region region)
+        public async Task<IActionResult> PutRegion(Guid id, RegionDto regionDto)
         {
-            if (id != region.Id)
+            var region = await repository.PutRegion(id, regionDto);
+            if (region == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(region).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RegionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(region);
         }
 
         // POST: api/regions
         [HttpPost]
-        public async Task<ActionResult<Region>> PostRegion(Region region)
+        public async Task<ActionResult<Region>> PostRegion(RegionDto regionDto)
         {
-            _context.Regions.Add(region);
-            await _context.SaveChangesAsync();
+            var region = await repository.PostRegion(regionDto);
+            if (region == null)
+            {
+                return BadRequest();
+            }
 
-            return CreatedAtAction("GetRegion", new { id = region.Id }, region);
+            return Ok(region);
         }
 
-        // DELETE: api/regions/5
+        // DELETE: api/regions/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRegion(Guid id)
         {
-            var region = await _context.Regions.FindAsync(id);
+            var region = await repository.DeleteRegion(id);
             if (region == null)
             {
                 return NotFound();
             }
 
-            _context.Regions.Remove(region);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool RegionExists(Guid id)
-        {
-            return _context.Regions.Any(e => e.Id == id);
+            return Ok();
         }
     }
 }

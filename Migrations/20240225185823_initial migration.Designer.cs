@@ -12,7 +12,7 @@ using NZWalksAPI.Data;
 namespace NZWalksAPI.Migrations
 {
     [DbContext(typeof(NZWalksDbContext))]
-    [Migration("20240225164224_initial migration")]
+    [Migration("20240225185823_initial migration")]
     partial class initialmigration
     {
         /// <inheritdoc />
@@ -54,7 +54,7 @@ namespace NZWalksAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RegionImgUrl")
+                    b.Property<string>("RegionImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
