@@ -2,6 +2,7 @@
 using NZWalksAPI.Models.Domain;
 using NZWalksAPI.Models.Dto;
 using NZWalksAPI.Repositories.Interfaces;
+using NZWalksAPI.Utils;
 
 namespace NZWalksAPI.Controllers
 {
@@ -40,6 +41,7 @@ namespace NZWalksAPI.Controllers
 
         // PUT: api/walks/{id}
         [HttpPut("{id}")]
+        [ValidateModel]
         public async Task<IActionResult> PutWalk(Guid id, CreateWalkDto walkDto)
         {
             var walk = await repository.PutWalk(id, walkDto);
@@ -53,6 +55,7 @@ namespace NZWalksAPI.Controllers
 
         // POST: api/walks
         [HttpPost]
+        [ValidateModel]
         public async Task<ActionResult<ResponseWalkDto>> PostWalk(CreateWalkDto createWalkDto)
         {
             var walk = await repository.PostWalk(createWalkDto);

@@ -2,6 +2,7 @@
 using NZWalksAPI.Models.Domain;
 using NZWalksAPI.Models.Dto;
 using NZWalksAPI.Repositories.Interfaces;
+using NZWalksAPI.Utils;
 
 namespace NZWalksAPI.Controllers
 {
@@ -25,7 +26,7 @@ namespace NZWalksAPI.Controllers
         }
 
         // GET: api/difficulties/{id}
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         public async Task<ActionResult<Difficulty>> GetDifficulty(Guid id)
         {
             var difficulty = await repository.GetDifficulty(id);
@@ -39,7 +40,8 @@ namespace NZWalksAPI.Controllers
         }
 
         // PUT: api/difficulties/{id}
-        [HttpPut("{id}")]
+        [HttpPut("{id:guid}")]
+        [ValidateModel]
         public async Task<IActionResult> PutDifficulty(Guid id, DifficultyDto difficultyDto)
         {
             var difficulty = await repository.PutDifficulty(id, difficultyDto);
@@ -53,6 +55,7 @@ namespace NZWalksAPI.Controllers
 
         // POST: api/difficulties
         [HttpPost]
+        [ValidateModel]
         public async Task<ActionResult<Difficulty>> PostDifficulty(DifficultyDto difficultyDto)
         {
             var difficulty = await repository.PostDifficulty(difficultyDto);
@@ -66,7 +69,7 @@ namespace NZWalksAPI.Controllers
         }
 
         // DELETE: api/difficulties/{id}
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteDifficulty(Guid id)
         {
             var difficulty = await repository.DeleteDifficulty(id);

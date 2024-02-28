@@ -2,6 +2,7 @@
 using NZWalksAPI.Models.Domain;
 using NZWalksAPI.Models.Dto;
 using NZWalksAPI.Repositories.Interfaces;
+using NZWalksAPI.Utils;
 
 namespace NZWalksAPI.Controllers
 {
@@ -40,6 +41,7 @@ namespace NZWalksAPI.Controllers
 
         // PUT: api/regions/{id}
         [HttpPut("{id}")]
+        [ValidateModel]
         public async Task<IActionResult> PutRegion(Guid id, RegionDto regionDto)
         {
             var region = await repository.PutRegion(id, regionDto);
@@ -53,6 +55,7 @@ namespace NZWalksAPI.Controllers
 
         // POST: api/regions
         [HttpPost]
+        [ValidateModel]
         public async Task<ActionResult<Region>> PostRegion(RegionDto regionDto)
         {
             var region = await repository.PostRegion(regionDto);
