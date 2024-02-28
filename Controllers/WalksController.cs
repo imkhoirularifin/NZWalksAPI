@@ -13,7 +13,7 @@ namespace NZWalksAPI.Controllers
         private readonly IWalkRepository repository = repository;
 
         // Get Walks
-        // GET: api/walks?searchQuery=mountain
+        // GET: api/walks?searchQuery=mountain&sortBy=length&asc=false
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Walk>>> GetWalks(
             [FromQuery] string? searchQuery,
