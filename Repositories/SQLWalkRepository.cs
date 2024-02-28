@@ -41,13 +41,36 @@ namespace NZWalksAPI.Repositories
             return walk;
         }
 
-        public async Task<IEnumerable<Walk?>> GetWalks(string? searchQuery)
+        public async Task<IEnumerable<Walk?>> GetWalks(
+            string? searchQuery,
+            string? sortBy,
+            bool asc
+        )
         {
             var walks = context.Walks.Include("Difficulty").Include("Region").AsQueryable();
 
-            if (!string.IsNullOrEmpty(searchQuery) && !string.IsNullOrWhiteSpace(searchQuery))
+            // Filtering
+            if (!string.IsNullOrEmpty(searchQuery))
             {
                 walks = walks.Where(x => x.Name.Contains(searchQuery));
+            }
+
+            // Sorting
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                // sort by name
+                if (sortBy.Equals("name", StringComparison.OrdinalIgnoreCase))
+                {
+                    walks = asc ? walks.OrderBy(x => x.Name) : walks.OrderByDescending(x => x.Name);
+                }
+
+                // sort by length
+                if (sortBy.Equals("length", StringComparison.OrdinalIgnoreCase))
+                {
+                    walks = asc
+                        ? walks.OrderBy(x => x.LengthInKm)
+                        : walks.OrderByDescending(x => x.LengthInKm);
+                }
             }
 
             return await walks.ToListAsync();

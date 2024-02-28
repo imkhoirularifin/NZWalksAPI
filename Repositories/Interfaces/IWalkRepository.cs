@@ -5,7 +5,7 @@ namespace NZWalksAPI.Repositories.Interfaces
 {
     public interface IWalkRepository
     {
-        Task<IEnumerable<Walk?>> GetWalks(string? searchQuery);
+        Task<IEnumerable<Walk?>> GetWalks(string? searchQuery, string? sortBy, bool asc);
         Task<Walk?> GetWalk(Guid id);
         Task<Walk?> PutWalk(Guid id, CreateWalkDto walkDto);
         Task<ResponseWalkDto?> PostWalk(CreateWalkDto walkDto);

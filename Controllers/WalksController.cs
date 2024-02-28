@@ -15,9 +15,13 @@ namespace NZWalksAPI.Controllers
         // Get Walks
         // GET: api/walks?searchQuery=mountain
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Walk>>> GetWalks([FromQuery] string? searchQuery)
+        public async Task<ActionResult<IEnumerable<Walk>>> GetWalks(
+            [FromQuery] string? searchQuery,
+            [FromQuery] string? sortBy,
+            [FromQuery] bool asc = true
+        )
         {
-            var walks = await repository.GetWalks(searchQuery);
+            var walks = await repository.GetWalks(searchQuery, sortBy, asc);
             if (walks == null)
             {
                 return NotFound();
