@@ -12,11 +12,12 @@ namespace NZWalksAPI.Controllers
     {
         private readonly IWalkRepository repository = repository;
 
-        // GET: api/walks
+        // Get Walks
+        // GET: api/walks?searchQuery=mountain
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Walk>>> GetWalks()
+        public async Task<ActionResult<IEnumerable<Walk>>> GetWalks([FromQuery] string? searchQuery)
         {
-            var walks = await repository.GetWalks();
+            var walks = await repository.GetWalks(searchQuery);
             if (walks == null)
             {
                 return NotFound();
@@ -25,6 +26,7 @@ namespace NZWalksAPI.Controllers
             return Ok(walks);
         }
 
+        // Get Walk
         // GET: api/walks/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Walk>> GetWalk(Guid id)
@@ -39,6 +41,7 @@ namespace NZWalksAPI.Controllers
             return walk;
         }
 
+        // Edit Walk
         // PUT: api/walks/{id}
         [HttpPut("{id}")]
         [ValidateModel]
@@ -53,6 +56,7 @@ namespace NZWalksAPI.Controllers
             return Ok(walk);
         }
 
+        // Create Walk
         // POST: api/walks
         [HttpPost]
         [ValidateModel]
@@ -67,6 +71,7 @@ namespace NZWalksAPI.Controllers
             return walk;
         }
 
+        // Delete Walk
         // DELETE: api/walks/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWalk(Guid id)
