@@ -13,15 +13,17 @@ namespace NZWalksAPI.Controllers
         private readonly IWalkRepository repository = repository;
 
         // Get Walks
-        // GET: api/walks?searchQuery=mountain&sortBy=length&asc=false
+        // GET: api/walks?searchQuery=mountain&sortBy=length&asc=false&page=1&pageSize=10
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Walk>>> GetWalks(
             [FromQuery] string? searchQuery,
             [FromQuery] string? sortBy,
-            [FromQuery] bool asc = true
+            [FromQuery] bool asc = true,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10
         )
         {
-            var walks = await repository.GetWalks(searchQuery, sortBy, asc);
+            var walks = await repository.GetWalks(searchQuery, sortBy, asc, page, pageSize);
             if (walks == null)
             {
                 return NotFound();

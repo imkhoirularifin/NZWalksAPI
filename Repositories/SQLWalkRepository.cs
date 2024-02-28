@@ -44,7 +44,9 @@ namespace NZWalksAPI.Repositories
         public async Task<IEnumerable<Walk?>> GetWalks(
             string? searchQuery,
             string? sortBy,
-            bool asc
+            bool asc,
+            int page,
+            int pageSize
         )
         {
             var walks = context.Walks.Include("Difficulty").Include("Region").AsQueryable();
@@ -73,7 +75,10 @@ namespace NZWalksAPI.Repositories
                 }
             }
 
-            return await walks.ToListAsync();
+            // Pagination
+            var skip = (page - 1) * pageSize;
+
+            return await walks.Skip(skip).Take(pageSize).ToListAsync();
         }
 
         public async Task<ResponseWalkDto?> PostWalk(CreateWalkDto walkDto)
