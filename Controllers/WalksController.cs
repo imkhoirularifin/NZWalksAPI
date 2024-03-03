@@ -18,7 +18,7 @@ namespace NZWalksAPI.Controllers
         public async Task<ActionResult<IEnumerable<Walk>>> GetWalks(
             [FromQuery] string? searchQuery,
             [FromQuery] string? sortBy,
-            [FromQuery] bool asc = true,
+            [FromQuery] bool asc,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10
         )
@@ -51,12 +51,12 @@ namespace NZWalksAPI.Controllers
         // PUT: api/walks/{id}
         [HttpPut("{id}")]
         [ValidateModel]
-        public async Task<IActionResult> PutWalk(Guid id, CreateWalkDto walkDto)
+        public async Task<IActionResult> PutWalk(Guid id, UpdateWalkDto walkDto)
         {
-            var walk = await repository.PutWalk(id, walkDto);
-            if (walk == null)
+            var (walk, errorMessage) = await repository.PutWalk(id, walkDto);
+            if (errorMessage != null)
             {
-                return BadRequest();
+                return BadRequest(new { Error = errorMessage });
             }
 
             return Ok(walk);
@@ -68,13 +68,13 @@ namespace NZWalksAPI.Controllers
         [ValidateModel]
         public async Task<ActionResult<ResponseWalkDto>> PostWalk(CreateWalkDto createWalkDto)
         {
-            var walk = await repository.PostWalk(createWalkDto);
-            if (walk == null)
+            var (response, errorMessage) = await repository.PostWalk(createWalkDto);
+            if (errorMessage != null)
             {
-                return BadRequest();
+                return BadRequest(new { Error = errorMessage });
             }
 
-            return walk;
+            return response!;
         }
 
         // Delete Walk

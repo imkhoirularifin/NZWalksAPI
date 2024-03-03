@@ -13,8 +13,8 @@ namespace NZWalksAPI.Repositories.Interfaces
             int pageSize
         );
         Task<Walk?> GetWalk(Guid id);
-        Task<Walk?> PutWalk(Guid id, CreateWalkDto walkDto);
-        Task<ResponseWalkDto?> PostWalk(CreateWalkDto walkDto);
+        Task<(Walk? walk, string? errorMessage)> PutWalk(Guid id, UpdateWalkDto walkDto);
+        Task<(ResponseWalkDto? response, string? errorMessage)> PostWalk(CreateWalkDto walkDto);
         Task<Walk?> DeleteWalk(Guid id);
     }
 }

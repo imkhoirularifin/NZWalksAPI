@@ -7,9 +7,9 @@ namespace NZWalksAPI.Repositories.Interfaces
     {
         Task<IEnumerable<Region?>> GetRegions();
         Task<Region?> GetRegion(Guid id);
-        Task<Region?> PutRegion(Guid id, RegionDto regionDto);
+        Task<(Region?, string? errorMessage)> PutRegion(Guid id, UpdateRegionDto regionDto);
 
-        Task<Region?> PostRegion(RegionDto regionDto);
+        Task<(Region? region, string? errorMessage)> PostRegion(CreateRegionDto regionDto);
         Task<Region?> DeleteRegion(Guid id);
     }
 }

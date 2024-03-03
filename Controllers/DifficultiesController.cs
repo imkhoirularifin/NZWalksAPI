@@ -16,6 +16,7 @@ namespace NZWalksAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Difficulty>>> GetDifficulties()
         {
+            throw new Exception("Test error");
             var difficulties = await repository.GetDifficulties();
             if (difficulties == null)
             {

@@ -3,7 +3,7 @@ using NZWalksAPI.Models.Domain;
 
 namespace NZWalksAPI.Data
 {
-    public class NZWalksDbContext(DbContextOptions opt) : DbContext(opt)
+    public class NZWalksDbContext(DbContextOptions<NZWalksDbContext> opt) : DbContext(opt)
     {
         // Use snipet "ctor" to create class constructor
         // DbSet represent each entity in the database

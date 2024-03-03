@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NZWalksAPI.Models.Domain;
 using NZWalksAPI.Models.Dto;
 using NZWalksAPI.Repositories.Interfaces;
@@ -14,12 +15,13 @@ namespace NZWalksAPI.Controllers
 
         // GET: api/regions
         [HttpGet]
+        [Authorize(Roles = "User, Admin")]
         public async Task<ActionResult<IEnumerable<Region>>> GetRegions()
         {
             var regions = await repository.GetRegions();
             if (regions == null)
             {
-                return NotFound();
+                return NotFound("Regions not found");
             }
 
             return Ok(regions);
@@ -27,13 +29,14 @@ namespace NZWalksAPI.Controllers
 
         // GET: api/regions/{id}
         [HttpGet("{id}")]
+        [Authorize(Roles = "User, Admin")]
         public async Task<ActionResult<Region>> GetRegion(Guid id)
         {
             var region = await repository.GetRegion(id);
 
             if (region == null)
             {
-                return NotFound();
+                return NotFound("Region not found");
             }
 
             return Ok(region);
@@ -42,12 +45,13 @@ namespace NZWalksAPI.Controllers
         // PUT: api/regions/{id}
         [HttpPut("{id}")]
         [ValidateModel]
-        public async Task<IActionResult> PutRegion(Guid id, RegionDto regionDto)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> PutRegion(Guid id, UpdateRegionDto regionDto)
         {
             var region = await repository.PutRegion(id, regionDto);
-            if (region == null)
+            if (region.errorMessage != null)
             {
-                return BadRequest();
+                return BadRequest(new { Error = region.errorMessage });
             }
 
             return Ok(region);
@@ -56,12 +60,13 @@ namespace NZWalksAPI.Controllers
         // POST: api/regions
         [HttpPost]
         [ValidateModel]
-        public async Task<ActionResult<Region>> PostRegion(RegionDto regionDto)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<Region>> PostRegion(CreateRegionDto regionDto)
         {
-            var region = await repository.PostRegion(regionDto);
-            if (region == null)
+            var (region, errorMessage) = await repository.PostRegion(regionDto);
+            if (errorMessage != null)
             {
-                return BadRequest();
+                return BadRequest(new { Error = errorMessage });
             }
 
             return Ok(region);
@@ -69,6 +74,7 @@ namespace NZWalksAPI.Controllers
 
         // DELETE: api/regions/{id}
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteRegion(Guid id)
         {
             var region = await repository.DeleteRegion(id);
